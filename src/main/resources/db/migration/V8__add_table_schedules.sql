@@ -19,7 +19,6 @@ CREATE TABLE schedules
     created_at      TEXT    NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     updated_at      TEXT    NOT NULL,
 
-    UNIQUE (backup_id, cron_expression),
     CHECK (cron_expression != ''),
     CHECK (active IN (0, 1)),
     CHECK (last_run_status IN ('IN_PROGRESS', 'COMPLETED', 'FAILED')),
@@ -28,6 +27,9 @@ CREATE TABLE schedules
         REFERENCES backups (id)
         ON DELETE CASCADE
 );
+
+CREATE UNIQUE INDEX idx_schedules_backup_cron_expression
+    ON schedules (backup_id, cron_expression);
 
 CREATE INDEX idx_schedules_backup_active_next_run_at
     ON schedules (backup_id, active, next_run_at)

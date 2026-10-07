@@ -16,7 +16,6 @@ CREATE TABLE path_filters
     created_at  TEXT    NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     updated_at  TEXT    NOT NULL,
 
-    UNIQUE (backup_id, path_filter),
     CHECK (path_filter != ''),
     CHECK (filter_type IN ('EXCLUDE', 'INCLUDE')),
     CHECK (order_index >= 0),
@@ -25,6 +24,9 @@ CREATE TABLE path_filters
         REFERENCES backups (id)
         ON DELETE CASCADE
 );
+
+CREATE UNIQUE INDEX idx_path_filters_backup_path_filter
+    ON path_filters (backup_id, path_filter);
 
 CREATE UNIQUE INDEX idx_path_filters_backup_order
     ON path_filters (backup_id, order_index);

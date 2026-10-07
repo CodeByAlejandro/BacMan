@@ -20,10 +20,12 @@ CREATE TABLE backups
     created_at                     TEXT    NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     updated_at                     TEXT    NOT NULL,
 
-    UNIQUE (backup_path),
     CHECK (source_path != ''),
     CHECK (backup_path != ''),
     CHECK (has_file_size_change_detection IN (0, 1)),
     CHECK (has_checksum_change_detection IN (0, 1)),
     CHECK (has_scrub_integrity_checks IN (0, 1))
 );
+
+CREATE UNIQUE INDEX idx_backups_backup_path
+    ON backups (backup_path);

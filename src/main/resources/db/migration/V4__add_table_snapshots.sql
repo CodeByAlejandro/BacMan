@@ -16,7 +16,6 @@ CREATE TABLE snapshots
     created_at    TEXT    NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     updated_at    TEXT    NOT NULL,
 
-    UNIQUE (snapshot_path),
     CHECK (snapshot_path != ''),
     CHECK (origin IN ('MANUAL', 'SCHEDULED')),
     CHECK (is_live IN (0, 1)),
@@ -25,6 +24,9 @@ CREATE TABLE snapshots
         REFERENCES backups (id)
         ON DELETE CASCADE
 );
+
+CREATE UNIQUE INDEX idx_snapshots_snapshot_path
+    ON snapshots (snapshot_path);
 
 CREATE UNIQUE INDEX idx_snapshots_backup_live
     ON snapshots (backup_id, is_live)
