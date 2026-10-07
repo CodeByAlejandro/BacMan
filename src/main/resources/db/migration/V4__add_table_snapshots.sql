@@ -27,12 +27,12 @@ CREATE TABLE snapshots
         ON DELETE CASCADE
 );
 
-CREATE UNIQUE INDEX idx_snapshots_backup_active
+CREATE UNIQUE INDEX idx_snapshots_backup_live
     ON snapshots (backup_id, is_live)
     WHERE is_live = 1;
 
 CREATE INDEX idx_snapshots_backup_created
     ON snapshots (backup_id, created_at);
 
-CREATE INDEX idx_snapshots_backup_type_created
+CREATE INDEX idx_snapshots_backup_origin_created
     ON snapshots (backup_id, origin, created_at);
