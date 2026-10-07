@@ -8,9 +8,8 @@ CREATE TABLE path_filters
     -- Relative to backups.source_path
     -- Supports *, **, ?, trailing /
 
-    filter_type INTEGER NOT NULL,
-    -- 0 = EXCLUDE
-    -- 1 = INCLUDE
+    filter_type TEXT    NOT NULL,
+    -- EXCLUDE | INCLUDE
 
     order_index INTEGER NOT NULL,
 
@@ -19,7 +18,7 @@ CREATE TABLE path_filters
 
     UNIQUE (backup_id, path_filter),
     CHECK (path_filter != ''),
-    CHECK (filter_type IN (0, 1)),
+    CHECK (filter_type IN ('EXCLUDE', 'INCLUDE')),
     CHECK (order_index >= 0),
 
     FOREIGN KEY (backup_id)

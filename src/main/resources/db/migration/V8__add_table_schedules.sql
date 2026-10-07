@@ -13,10 +13,8 @@ CREATE TABLE schedules
     next_run_at     TEXT,
 
     last_run_at     TEXT,
-    last_run_status INTEGER,
-    -- 0 = IN_PROGRESS
-    -- 1 = COMPLETED
-    -- 2 = FAILED
+    last_run_status TEXT,
+    -- IN_PROGRESS | COMPLETED | FAILED
 
     created_at      TEXT    NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     updated_at      TEXT    NOT NULL,
@@ -24,7 +22,7 @@ CREATE TABLE schedules
     UNIQUE (backup_id, cron_expression),
     CHECK (cron_expression != ''),
     CHECK (active IN (0, 1)),
-    CHECK (last_run_status IN (0, 1, 2)),
+    CHECK (last_run_status IN ('IN_PROGRESS', 'COMPLETED', 'FAILED')),
 
     FOREIGN KEY (backup_id)
         REFERENCES backups (id)

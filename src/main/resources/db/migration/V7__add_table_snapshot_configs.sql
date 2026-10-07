@@ -4,11 +4,10 @@ CREATE TABLE snapshot_configs
 
     backup_id                      INTEGER NOT NULL,
 
-    tracking_policy                INTEGER NOT NULL DEFAULT 0,
-    -- 0 = ALL_FILES
-    -- 1 = DELETED_FILES_ONLY
+    tracking_policy                TEXT    NOT NULL DEFAULT 'ALL_FILES',
+    -- ALL_FILES | DELETED_FILES_ONLY
 
-    hardlink_deduplication         INTEGER NOT NULL DEFAULT 1,
+    has_hardlink_deduplication     INTEGER NOT NULL DEFAULT 1,
     -- 0 = DISABLED
     -- 1 = ENABLED
 
@@ -19,8 +18,8 @@ CREATE TABLE snapshot_configs
     created_at                     TEXT    NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     updated_at                     TEXT    NOT NULL,
 
-    CHECK (tracking_policy IN (0, 1)),
-    CHECK (hardlink_deduplication IN (0, 1)),
+    CHECK (tracking_policy IN ('ALL_FILES', 'DELETED_FILES_ONLY')),
+    CHECK (has_hardlink_deduplication IN (0, 1)),
     CHECK (snapshot_amount_limit IS NULL OR snapshot_amount_limit >= 1),
     CHECK (snapshot_age_limit IS NULL OR snapshot_age_limit >= 0),
     CHECK (snapshot_cumulative_size_limit IS NULL OR snapshot_cumulative_size_limit >= 0),

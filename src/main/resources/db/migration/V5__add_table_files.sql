@@ -4,35 +4,31 @@ CREATE TABLE files
 
     snapshot_id      INTEGER NOT NULL,
 
-    -- Relative to snapshots.snapshot_path
     relative_path    TEXT    NOT NULL,
+    -- Relative to snapshots.snapshot_path
 
     mtime            TEXT    NOT NULL,
     size             INTEGER NOT NULL,
     checksum         BLOB    NOT NULL,
 
-    state            INTEGER NOT NULL,
-    -- 0 = CREATED
-    -- 1 = STALE
-    -- 2 = MODIFIED
-    -- 3 = MOVED
-    -- 4 = REMOVED
+    state            TEXT    NOT NULL,
+    -- CREATED | STALE | MODIFIED | MOVED | REMOVED
 
-    -- Points to record with state = MOVED (the old location)
     moved_from_id    INTEGER,
+    -- Points to record with state = MOVED (the old location), this record will have state = CREATED
 
-    reliability      INTEGER NOT NULL DEFAULT 1,
-    -- 1 = RELIABLE
-    -- 2 = UNRELIABLE
+    reliability      TEXT    NOT NULL DEFAULT 'RELIABLE',
+    -- RELIABLE | UNRELIABLE
 
     last_verified_at INTEGER,
 
     created_at       TEXT    NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     updated_at       TEXT    NOT NULL,
 
+    CHECK (relative_path != ''),
     CHECK (size >= 0),
-    CHECK (state IN (0, 1, 2, 3, 4)),
-    CHECK (reliability IN (1, 2)),
+    CHECK (state IN ('CREATED', 'STALE', 'MODIFIED', 'MOVED', 'REMOVED')),
+    CHECK (reliability IN ('RELIABLE', 'UNRELIABLE')),
 
     FOREIGN KEY (snapshot_id)
         REFERENCES snapshots (id)
@@ -49,8 +45,10 @@ CREATE UNIQUE INDEX idx_files_snapshot_path
 CREATE INDEX idx_files_snapshot_state
     ON files (snapshot_id, state);
 
+-- Needed for efficient ON DELETE SET NULL
 CREATE INDEX idx_files_moved_from
-    ON files (moved_from_id);
+    ON files (moved_from_id)
+    WHERE moved_from_id IS NOT NULL;
 
 CREATE INDEX idx_files_checksum
     ON files (checksum);
@@ -60,4 +58,4 @@ CREATE INDEX idx_files_scrub
 
 CREATE INDEX idx_files_unreliable
     ON files (snapshot_id)
-    WHERE reliability = 2;
+    WHERE reliability = 'UNRELIABLE';

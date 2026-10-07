@@ -6,9 +6,8 @@ CREATE TABLE snapshots
 
     snapshot_path TEXT    NOT NULL,
 
-    origin        INTEGER NOT NULL,
-    -- 0 = MANUAL
-    -- 1 = SCHEDULED
+    origin        TEXT    NOT NULL,
+    -- MANUAL | SCHEDULED
 
     is_live       INTEGER NOT NULL DEFAULT 1,
     -- 0 = HISTORICAL
@@ -19,7 +18,7 @@ CREATE TABLE snapshots
 
     UNIQUE (snapshot_path),
     CHECK (snapshot_path != ''),
-    CHECK (origin IN (0, 1)),
+    CHECK (origin IN ('MANUAL', 'SCHEDULED')),
     CHECK (is_live IN (0, 1)),
 
     FOREIGN KEY (backup_id)
