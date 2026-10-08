@@ -4,6 +4,6 @@ FROM files f
          JOIN backups b ON b.id = s.backup_id
 WHERE f.reliability = 'RELIABLE'
   AND (f.last_verified_at IS NULL OR f.last_verified_at < ?1)
-  AND b.scrub_integrity_checks = 1
+  AND b.has_scrub_integrity_checks = 1
 ORDER BY s.created_at DESC
 LIMIT ?2;
