@@ -19,9 +19,9 @@ CREATE TABLE schedules
     created_at      TEXT    NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     updated_at      TEXT    NOT NULL,
 
-    CHECK (cron_expression != ''),
-    CHECK (active IN (0, 1)),
-    CHECK (last_run_status IN ('IN_PROGRESS', 'COMPLETED', 'FAILED')),
+    CONSTRAINT ck_schedules_cron_expression_not_empty CHECK (cron_expression != ''),
+    CONSTRAINT ck_schedules_active_bool CHECK (active IN (0, 1)),
+    CONSTRAINT ck_schedules_last_run_status_valid CHECK (last_run_status IN ('IN_PROGRESS', 'COMPLETED', 'FAILED')),
 
     FOREIGN KEY (backup_id)
         REFERENCES backups (id)

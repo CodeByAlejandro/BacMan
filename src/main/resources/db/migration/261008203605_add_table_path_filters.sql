@@ -16,9 +16,9 @@ CREATE TABLE path_filters
     created_at  TEXT    NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     updated_at  TEXT    NOT NULL,
 
-    CHECK (path_filter != ''),
-    CHECK (filter_type IN ('EXCLUDE', 'INCLUDE')),
-    CHECK (order_index >= 0),
+    CONSTRAINT ck_path_filters_path_filter_not_empty CHECK (path_filter != ''),
+    CONSTRAINT ck_path_filters_filter_type_valid CHECK (filter_type IN ('EXCLUDE', 'INCLUDE')),
+    CONSTRAINT ck_path_filters_order_index_non_negative CHECK (order_index >= 0),
 
     FOREIGN KEY (backup_id)
         REFERENCES backups (id)

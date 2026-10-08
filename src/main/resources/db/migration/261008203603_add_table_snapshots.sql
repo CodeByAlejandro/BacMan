@@ -16,9 +16,9 @@ CREATE TABLE snapshots
     created_at    TEXT    NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     updated_at    TEXT    NOT NULL,
 
-    CHECK (snapshot_path != ''),
-    CHECK (origin IN ('MANUAL', 'SCHEDULED')),
-    CHECK (is_live IN (0, 1)),
+    CONSTRAINT ck_snapshots_snapshot_path_not_empty CHECK (snapshot_path != ''),
+    CONSTRAINT ck_snapshots_origin_valid CHECK (origin IN ('MANUAL', 'SCHEDULED')),
+    CONSTRAINT ck_snapshots_is_live_bool CHECK (is_live IN (0, 1)),
 
     FOREIGN KEY (backup_id)
         REFERENCES backups (id)

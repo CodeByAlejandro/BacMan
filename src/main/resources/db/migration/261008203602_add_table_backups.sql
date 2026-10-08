@@ -20,11 +20,11 @@ CREATE TABLE backups
     created_at                     TEXT    NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     updated_at                     TEXT    NOT NULL,
 
-    CHECK (source_path != ''),
-    CHECK (backup_path != ''),
-    CHECK (has_file_size_change_detection IN (0, 1)),
-    CHECK (has_checksum_change_detection IN (0, 1)),
-    CHECK (has_scrub_integrity_checks IN (0, 1))
+    CONSTRAINT ck_backups_source_path_not_empty CHECK (source_path != ''),
+    CONSTRAINT ck_backups_backup_path_not_empty CHECK (backup_path != ''),
+    CONSTRAINT ck_backups_file_size_change_detection_bool CHECK (has_file_size_change_detection IN (0, 1)),
+    CONSTRAINT ck_backups_checksum_change_detection_bool CHECK (has_checksum_change_detection IN (0, 1)),
+    CONSTRAINT ck_backups_scrub_integrity_checks_bool CHECK (has_scrub_integrity_checks IN (0, 1))
 );
 
 CREATE UNIQUE INDEX idx_backups_backup_path

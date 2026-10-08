@@ -4,7 +4,7 @@ CREATE TABLE db_migrations
     migration_file TEXT NOT NULL,
     applied_at     TEXT NOT NULL DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now')),
 
-    CHECK (migration_file != '')
+    CONSTRAINT ck_db_migrations_migration_file_not_empty CHECK (migration_file != '')
 );
 
 CREATE UNIQUE INDEX idx_db_migrations_migration_file

@@ -25,10 +25,10 @@ CREATE TABLE files
     created_at       TEXT    NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     updated_at       TEXT    NOT NULL,
 
-    CHECK (relative_path != ''),
-    CHECK (size >= 0),
-    CHECK (state IN ('CREATED', 'STALE', 'MODIFIED', 'MOVED', 'REMOVED')),
-    CHECK (reliability IN ('RELIABLE', 'UNRELIABLE')),
+    CONSTRAINT ck_files_relative_path_not_empty CHECK (relative_path != ''),
+    CONSTRAINT ck_files_size_non_negative CHECK (size >= 0),
+    CONSTRAINT ck_files_state_valid CHECK (state IN ('CREATED', 'STALE', 'MODIFIED', 'MOVED', 'REMOVED')),
+    CONSTRAINT ck_files_reliability_valid CHECK (reliability IN ('RELIABLE', 'UNRELIABLE')),
 
     FOREIGN KEY (snapshot_id)
         REFERENCES snapshots (id)
