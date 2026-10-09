@@ -67,16 +67,10 @@ class ClassPathResource implements Comparable<ClassPathResource> {
 	}
 
 	private String removeLeadingForwardSlash(String path) {
-		if (path.startsWith("/")) {
-			return path.substring(1);
-		}
-		return path;
+		return path.startsWith("/") ? path.substring(1) : path;
 	}
 
 	private String removeTrailingForwardSlash(String path) {
-		if (path.endsWith("/")) {
-			return path.substring(0, path.length() - 1);
-		}
-		return path;
+		return path.endsWith("/") ? path.substring(0, path.length() - 1) : path;
 	}
 }
