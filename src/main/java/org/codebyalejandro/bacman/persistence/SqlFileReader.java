@@ -62,15 +62,11 @@ class SqlFileReader implements AutoCloseable {
 
 	private static String removeEndingCommentFromSqlLine(String sqlLine) {
 		int inlineCommentIdx = sqlLine.indexOf("--");
-		if (inlineCommentIdx != -1) {
-			return sqlLine.substring(0, inlineCommentIdx);
-		}
-		return sqlLine;
+		return inlineCommentIdx != -1 ? sqlLine.substring(0, inlineCommentIdx) : sqlLine;
 	}
 
 	private static int indexOfStatementEndingChar(String sqlLine) {
-		int fromIdx = 0;
-		for (int semicolonIdx; (semicolonIdx = sqlLine.indexOf(';', fromIdx)) != -1; fromIdx = semicolonIdx + 1) {
+		for (int fromIdx = 0, semicolonIdx; (semicolonIdx = sqlLine.indexOf(';', fromIdx)) != -1; fromIdx = semicolonIdx + 1) {
 			if (!isSemicolonInStringLiteral(sqlLine, semicolonIdx)) {
 				return semicolonIdx;
 			}
