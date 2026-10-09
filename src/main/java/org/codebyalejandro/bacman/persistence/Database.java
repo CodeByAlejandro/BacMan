@@ -27,12 +27,6 @@ public class Database {
 		return dataSource;
 	}
 
-	public void runStatement(String sql) throws SQLException {
-		try (var conn = dataSource.getConnection()) {
-			new StatementExecutor(conn).runStatement(sql);
-		}
-	}
-
 	public <R> R runQuery(String sql, ResultSetMapperFunction<R> resultMapper) throws SQLException {
 		try (var conn = dataSource.getConnection()) {
 			return new StatementExecutor(conn).runQuery(sql, resultMapper);
@@ -75,6 +69,21 @@ public class Database {
 		}
 	}
 
+	public void runStatement(String sql) throws SQLException {
+		try (var conn = dataSource.getConnection()) {
+			new StatementExecutor(conn).runStatement(sql);
+		}
+	}
+
+	public void runStatementsFromSqlResource(String sqlResourcePath) throws SQLException {
+		inTranaction(stmtExecutor -> {
+			stmtExecutor.runStatementsFromSqlResource(sqlResourcePath);
+			var sqlResource = new ClassPathResource(sqlResourcePath);
+			stmtExecutor.runUpdate("INSERT INTO db_migrations (migration_file) VALUES (?)",
+					stmt -> stmt.setString(1, sqlResource.toString()));
+		});
+	}
+
 	public void inTranaction(StatementExecutorConsumer stmtExecutorConsumer) throws SQLException {
 		try (var conn = dataSource.getConnection()) {
 			Transactional.inTransaction(conn, (Transactional.ConnectionConsumer)
@@ -87,14 +96,5 @@ public class Database {
 			return Transactional.inTransaction(conn, (Transactional.ConnectionFunction<R>)
 					connection -> stmtExecutorFunction.apply(new StatementExecutor(connection)));
 		}
-	}
-
-	public void runStatementsFromSqlResource(String sqlResourcePath) throws SQLException {
-		inTranaction(stmtExecutor -> {
-			stmtExecutor.runStatementsFromSqlResource(sqlResourcePath);
-			var sqlResource = new ClassPathResource(sqlResourcePath);
-			stmtExecutor.runUpdate("INSERT INTO db_migrations (migration_file) VALUES (?)",
-					stmt -> stmt.setString(1, sqlResource.toString()));
-		});
 	}
 }
