@@ -18,12 +18,6 @@ public class StatementExecutor {
 		this.connection = requireNonNull(connection, "connection");
 	}
 
-	public void runStatement(String sql) throws SQLException {
-		try (var stmt = connection.createStatement()) {
-			stmt.execute(sql);
-		}
-	}
-
 	public <R> R runQuery(String sql, ResultSetMapperFunction<R> resultMapper) throws SQLException {
 		try (var stmt = connection.createStatement(); var rs = stmt.executeQuery(sql)) {
 			return resultMapper.apply(rs);
@@ -81,6 +75,12 @@ public class StatementExecutor {
 		try (var stmt = connection.prepareStatement(sql)) {
 			stmtConsumer.accept(stmt);
 			return stmt.executeUpdate();
+		}
+	}
+
+	public void runStatement(String sql) throws SQLException {
+		try (var stmt = connection.createStatement()) {
+			stmt.execute(sql);
 		}
 	}
 
