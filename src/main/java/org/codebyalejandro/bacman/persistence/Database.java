@@ -76,7 +76,7 @@ public class Database {
 	}
 
 	public void runStatementsFromSqlResource(String sqlResourcePath) throws SQLException {
-		inTranaction(stmtExecutor -> {
+		inTransaction(stmtExecutor -> {
 			stmtExecutor.runStatementsFromSqlResource(sqlResourcePath);
 			var sqlResource = new ClassPathResource(sqlResourcePath);
 			stmtExecutor.runUpdate("INSERT INTO db_migrations (migration_file) VALUES (?)",
@@ -84,14 +84,14 @@ public class Database {
 		});
 	}
 
-	public void inTranaction(StatementExecutorConsumer stmtExecutorConsumer) throws SQLException {
+	public void inTransaction(StatementExecutorConsumer stmtExecutorConsumer) throws SQLException {
 		try (var conn = dataSource.getConnection()) {
 			Transactional.inTransaction(conn, (Transactional.ConnectionConsumer)
 					connection -> stmtExecutorConsumer.accept(new StatementExecutor(connection)));
 		}
 	}
 
-	public <R> R inTranaction(StatementExecutorFunction<R> stmtExecutorFunction) throws SQLException {
+	public <R> R inTransaction(StatementExecutorFunction<R> stmtExecutorFunction) throws SQLException {
 		try (var conn = dataSource.getConnection()) {
 			return Transactional.inTransaction(conn, (Transactional.ConnectionFunction<R>)
 					connection -> stmtExecutorFunction.apply(new StatementExecutor(connection)));
