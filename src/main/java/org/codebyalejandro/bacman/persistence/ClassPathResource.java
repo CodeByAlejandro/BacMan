@@ -3,7 +3,8 @@ package org.codebyalejandro.bacman.persistence;
 import java.util.regex.Pattern;
 
 class ClassPathResource implements Comparable<ClassPathResource> {
-	private static final Pattern VALID_PATH_PATTERN = Pattern.compile("/?[a-zA-Z0-9.\\-_]+(?:/[a-zA-Z0-9.\\-_]+)*+/?");
+	private static final Pattern VALID_PATH_PATTERN =
+			Pattern.compile("/?[a-zA-Z0-9.\\-_]+(?:/[a-zA-Z0-9.\\-_]+)*+/?");
 
 	private final String path;
 
