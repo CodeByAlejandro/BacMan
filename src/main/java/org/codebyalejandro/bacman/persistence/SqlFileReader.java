@@ -66,7 +66,10 @@ class SqlFileReader implements AutoCloseable {
 	}
 
 	private static int indexOfStatementEndingChar(String sqlLine) {
-		for (int fromIdx = 0, semicolonIdx; (semicolonIdx = sqlLine.indexOf(';', fromIdx)) != -1; fromIdx = semicolonIdx + 1) {
+		for (int fromIdx = 0, semicolonIdx;
+			 (semicolonIdx = sqlLine.indexOf(';', fromIdx)) != -1;
+			 fromIdx = semicolonIdx + 1
+		) {
 			if (!isSemicolonInStringLiteral(sqlLine, semicolonIdx)) {
 				return semicolonIdx;
 			}
