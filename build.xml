@@ -6,10 +6,14 @@
 
         <property name="resources.migration.dir"
                   value="${project.basedir}/src/main/resources/${migration.dir.part}"/>
+
+        <!-- ${project.build.directory} is the default build directory (target) -->
         <property name="generated.resources.migration.dir"
                   value="${project.build.directory}/generated-resources/${migration.dir.part}"/>
         <property name="generated.resources.migration.index"
                   value="${generated.resources.migration.dir}/${migration.index.file.name}"/>
+
+        <!-- ${project.build.outputDirectory} is the default output directory (target/classes) -->
         <property name="output.migration.dir"
                   value="${project.build.outputDirectory}/${migration.dir.part}"/>
         <property name="output.migration.index"

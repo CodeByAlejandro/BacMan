@@ -32,9 +32,12 @@
                         <configuration>
                             <target name="generate-migration-index">
                                 <ant antfile="${project.basedir}/build.xml" target="generate-migration-index">
-                                    <!-- Pass necessary Maven properties to the Ant script. -->
+                                    <!-- Only a subset of Maven properties is passed to an external Ant file (due to
+                                         name conflicts), so project.basedir is not available in build.xml by default.
+                                         Redefine it here. Other project.* properties used by build.xml, such as
+                                         project.build.directory and project.build.outputDirectory, are resolved without
+                                         being passed explicitly. -->
                                     <property name="project.basedir" value="${project.basedir}"/>
-                                    <property name="project.build.directory" value="${project.build.directory}"/>
                                 </ant>
                             </target>
                         </configuration>
