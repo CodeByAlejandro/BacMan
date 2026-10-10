@@ -4,7 +4,7 @@
         <property name="migration.dir.part" value="db/migration"/>
         <property name="migration.index.file.name" value="migration_index.txt"/>
 
-        <property name="migration.resources.dir"
+        <property name="resources.migration.dir"
                   value="${project.basedir}/src/main/resources/${migration.dir.part}"/>
         <property name="generated.resources.migration.dir"
                   value="${project.build.directory}/generated-resources/${migration.dir.part}"/>
@@ -19,7 +19,7 @@
         <mkdir dir="${output.migration.dir}"/>
 
         <path id="migration.files">
-            <fileset dir="${migration.resources.dir}">
+            <fileset dir="${resources.migration.dir}">
                 <include name="**/*.sql"/>
             </fileset>
         </path>
